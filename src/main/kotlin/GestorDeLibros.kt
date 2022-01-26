@@ -7,42 +7,50 @@ interface Catalogo{
 }
 
 
-class GestorDeLibros(catalogo: Catalogo){
+class GestorDeLibros(catalogo: Catalogo,interfaz : GestorDeLibrosIUT){
     private val cat: Catalogo
+    private val int : GestorDeLibrosIUT
+
 
     init {
         cat = catalogo
+        int = elegirInterfaz()
     }
 
-
     fun preguntarPorUnLibro() {
-        val idLibro = GestorDeLibrosIUT1.obtenerID()
-        GestorDeLibrosIUT1.existeLibro(cat, idLibro)
+        val idLibro = int.obtenerID()
+        int.existeLibro(cat, idLibro)
     }
 
     fun mostrarInfoDeUnLibro()
     {
-        val idLibro = GestorDeLibrosIUT1.obtenerID()
-        GestorDeLibrosIUT1.infoLibro(cat,idLibro)
+        val idLibro = int.obtenerID()
+        int.infoLibro(cat,idLibro)
     }
 
 }
 
+interface GestorDeLibrosIUT{
+    fun obtenerID(): String
+    fun existeLibro(cat: Catalogo,idLibro: String)
+    fun infoLibro(cat: Catalogo, idLibro: String)
+}
 
-class GestorDeLibrosIUT1(){
-    companion object {
-        fun obtenerID(): String {
+
+class GestorDeLibrosIUT1() : GestorDeLibrosIUT{
+
+        override fun obtenerID(): String {
             println("Introduzca un ID: ")
             return readln()
         }
-        fun existeLibro(cat: Catalogo,idLibro: String) {
+        override fun existeLibro(cat: Catalogo,idLibro: String) {
             if(cat.existeLibro(idLibro))
                 println("El libro $idLibro existe!")
             else
                 println("El libro $idLibro NO existe!")
         }
 
-        fun infoLibro(cat: Catalogo, idLibro: String) {
+        override fun infoLibro(cat: Catalogo, idLibro: String) {
             val infoLibro = cat.infoLibro(idLibro)
             if (infoLibro.isNotEmpty())
                 println("La información sobre es la siguiente\n$infoLibro")
@@ -50,8 +58,42 @@ class GestorDeLibrosIUT1(){
                 println("No se encontró información sobre el libro")
         }
 
+
+}
+
+class GestorDeLibrosIUT2() : GestorDeLibrosIUT{
+
+        override fun obtenerID(): String {
+            println("Enter ID: ")
+            return readln()
+        }
+        override fun existeLibro(cat: Catalogo,idLibro: String) {
+            if(cat.existeLibro(idLibro))
+                println("The book $idLibro exist!")
+            else
+                println("The book $idLibro doesn't exist!")
+        }
+
+        override fun infoLibro(cat: Catalogo, idLibro: String) {
+            val infoLibro = cat.infoLibro(idLibro)
+            if (infoLibro.isNotEmpty())
+                println("The information about is as follows\n$infoLibro")
+            else
+                println("No information found about the book")
+        }
+
+}
+
+fun elegirInterfaz(): GestorDeLibrosIUT {
+    println("Elige el idioma deseado\n1. Español\n2. Inglés")
+    val int = readLine()?.toInt()
+    return when(int){
+        1 -> GestorDeLibrosIUT1()
+        2 -> GestorDeLibrosIUT2()
+        else -> { TODO()}
     }
 }
+
 
 fun main() {
     val catalogo1 = CatalogoLibrosXML("..\\DAM1-6_5-AGB\\src\\main\\kotlin\\Catalog.xml")
@@ -62,6 +104,8 @@ fun main() {
         |,{"id":"bk105","autor":"Pedris5","title":"Libro de eduardo 5","genre":"Ficcion 5","price":29.45,"publish_date":"Oct 5, 2000 12:00:00 AM","description":"Descripción del libro 5"}
         |]""".trimMargin()
     val catalogo2 = CatalogoLibrosJSON(jsonLibros)
-    val gestorDeLibros = GestorDeLibros(catalogo2)
+    val interfaz1 = GestorDeLibrosIUT1()
+    val interfaz2 = GestorDeLibrosIUT2()
+    val gestorDeLibros = GestorDeLibros(catalogo2,interfaz2)
     gestorDeLibros.mostrarInfoDeUnLibro()
 }
