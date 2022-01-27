@@ -7,7 +7,7 @@ interface Catalogo{
 }
 
 
-class GestorDeLibros(catalogo: Catalogo,interfaz : GestorDeLibrosIUT){
+class GestorDeLibros(catalogo: Catalogo){
     private val cat: Catalogo
     private val int : GestorDeLibrosIUT
 
@@ -28,6 +28,15 @@ class GestorDeLibros(catalogo: Catalogo,interfaz : GestorDeLibrosIUT){
         int.infoLibro(cat,idLibro)
     }
 
+    fun elegirInterfaz(): GestorDeLibrosIUT {
+        println("Elige el idioma deseado\n1. Español\n2. Inglés")
+        val int = readLine()?.toInt()
+        return when(int){
+            1 -> GestorDeLibrosIUT1()
+            2 -> GestorDeLibrosIUT2()
+            else -> { TODO()}
+        }
+    }
 }
 
 interface GestorDeLibrosIUT{
@@ -84,16 +93,6 @@ class GestorDeLibrosIUT2() : GestorDeLibrosIUT{
 
 }
 
-fun elegirInterfaz(): GestorDeLibrosIUT {
-    println("Elige el idioma deseado\n1. Español\n2. Inglés")
-    val int = readLine()?.toInt()
-    return when(int){
-        1 -> GestorDeLibrosIUT1()
-        2 -> GestorDeLibrosIUT2()
-        else -> { TODO()}
-    }
-}
-
 
 fun main() {
     val catalogo1 = CatalogoLibrosXML("..\\DAM1-6_5-AGB\\src\\main\\kotlin\\Catalog.xml")
@@ -106,6 +105,6 @@ fun main() {
     val catalogo2 = CatalogoLibrosJSON(jsonLibros)
     val interfaz1 = GestorDeLibrosIUT1()
     val interfaz2 = GestorDeLibrosIUT2()
-    val gestorDeLibros = GestorDeLibros(catalogo2,interfaz2)
+    val gestorDeLibros = GestorDeLibros(catalogo2)
     gestorDeLibros.mostrarInfoDeUnLibro()
 }
