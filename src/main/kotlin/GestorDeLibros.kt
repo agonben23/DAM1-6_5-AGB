@@ -28,7 +28,7 @@ class GestorDeLibros(catalogo: Catalogo){
         int.infoLibro(cat,idLibro)
     }
 
-    fun elegirInterfaz(): GestorDeLibrosIUT {
+    private fun elegirInterfaz(): GestorDeLibrosIUT {
         println("Elige el idioma deseado\n1. Español\n2. Inglés")
         val int = readLine()?.toInt()
         return when(int){
