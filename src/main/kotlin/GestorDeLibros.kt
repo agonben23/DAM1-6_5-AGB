@@ -32,8 +32,8 @@ class GestorDeLibros(catalogo: Catalogo){
         println("Elige el idioma deseado\n1. Español\n2. Inglés")
         val int = readLine()?.toInt()
         return when(int){
-            1 -> GestorDeLibrosIUT1()
-            2 -> GestorDeLibrosIUT2()
+            1 -> GestorDeLibrosIUTEspanol()
+            2 -> GestorDeLibrosIUTIngles()
             else -> { TODO()}
         }
     }
@@ -46,7 +46,7 @@ interface GestorDeLibrosIUT{
 }
 
 
-class GestorDeLibrosIUT1() : GestorDeLibrosIUT{
+class GestorDeLibrosIUTEspanol() : GestorDeLibrosIUT{
 
         override fun obtenerID(): String {
             println("Introduzca un ID: ")
@@ -70,7 +70,7 @@ class GestorDeLibrosIUT1() : GestorDeLibrosIUT{
 
 }
 
-class GestorDeLibrosIUT2() : GestorDeLibrosIUT{
+class GestorDeLibrosIUTIngles() : GestorDeLibrosIUT{
 
         override fun obtenerID(): String {
             println("Enter ID: ")
@@ -103,8 +103,6 @@ fun main() {
         |,{"id":"bk105","autor":"Pedris5","title":"Libro de eduardo 5","genre":"Ficcion 5","price":29.45,"publish_date":"Oct 5, 2000 12:00:00 AM","description":"Descripción del libro 5"}
         |]""".trimMargin()
     val catalogo2 = CatalogoLibrosJSON(jsonLibros)
-    val interfaz1 = GestorDeLibrosIUT1()
-    val interfaz2 = GestorDeLibrosIUT2()
     val gestorDeLibros = GestorDeLibros(catalogo2)
     gestorDeLibros.mostrarInfoDeUnLibro()
 }
