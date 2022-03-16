@@ -1,5 +1,7 @@
 package un6.eje6_5
 
+import java.sql.DriverManager
+
 
 interface Catalogo{
     fun infoLibro(idLibro : String): Map<String,Any>
@@ -103,6 +105,11 @@ fun main() {
         |,{"id":"bk105","autor":"Pedris5","title":"Libro de eduardo 5","genre":"Ficcion 5","price":29.45,"publish_date":"Oct 5, 2000 12:00:00 AM","description":"Descripción del libro 5"}
         |]""".trimMargin()
     val catalogo2 = CatalogoLibrosJSON(jsonLibros)
-    val gestorDeLibros = GestorDeLibros(catalogo2)
+
+    val jdbcUrl = "jdbc:oracle:thin:@localhost:1521:XE"
+    val connection = DriverManager.getConnection(jdbcUrl, "PROG", "PROG")
+    val catalogo3 = CatalogoLibrosSQL(connection)
+
+    val gestorDeLibros = GestorDeLibros(catalogo3)
     gestorDeLibros.mostrarInfoDeUnLibro()
 }

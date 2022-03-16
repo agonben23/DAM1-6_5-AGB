@@ -15,6 +15,7 @@ repositories {
 dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
     testImplementation(kotlin("test"))
+    implementation("com.oracle.database.jdbc:ojdbc10:19.14.0.0")
 }
 
 tasks.test {
