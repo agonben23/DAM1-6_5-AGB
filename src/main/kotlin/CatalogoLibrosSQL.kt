@@ -39,14 +39,14 @@ class CatalogoLibrosSQL(private val connection: Connection) :Catalogo{
         return encontrado
     }
 
-    fun borrarLibro(idLibro: String): Boolean {
+    override fun borrarLibro(idLibro: String): Boolean {
         val query = connection.prepareStatement("SELECT ID FROM LIBROS")
         val result = query.executeQuery()
         var borrado = false
         while(result.next()){
             val id = result.getString("id")
             if (id == idLibro){
-                val eliminar = connection.prepareStatement("DELETE  FROM LIBROS WHERE ID=$idLibro")
+                val eliminar = connection.prepareStatement("DELETE FROM LIBROS WHERE ID = '$idLibro' ")
                 eliminar.executeQuery()
                 borrado = true
             }

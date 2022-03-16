@@ -3,15 +3,16 @@ package un6.eje6_5
 import java.sql.DriverManager
 
 
-interface Catalogo{
-    fun infoLibro(idLibro : String): Map<String,Any>
+interface Catalogo {
+    fun infoLibro(idLibro: String): Map<String, Any>
     fun existeLibro(idLibro: String): Boolean
+    fun borrarLibro(idLibro: String): Boolean
 }
 
 
-class GestorDeLibros(catalogo: Catalogo){
+class GestorDeLibros(catalogo: Catalogo) {
     private val cat: Catalogo
-    private val int : GestorDeLibrosIUT
+    private val int: GestorDeLibrosIUT
 
 
     init {
@@ -24,81 +25,109 @@ class GestorDeLibros(catalogo: Catalogo){
         int.existeLibro(cat, idLibro)
     }
 
-    fun mostrarInfoDeUnLibro()
-    {
+    fun eliminarUnLibro() {
         val idLibro = int.obtenerID()
-        int.infoLibro(cat,idLibro)
+        int.eliminarLibro(cat, idLibro)
+    }
+
+    fun mostrarInfoDeUnLibro() {
+        val idLibro = int.obtenerID()
+        int.infoLibro(cat, idLibro)
     }
 
     private fun elegirInterfaz(): GestorDeLibrosIUT {
         println("Elige el idioma deseado\n1. Español\n2. Inglés")
         val int = readLine()?.toInt()
-        return when(int){
+        return when (int) {
             1 -> GestorDeLibrosIUTEspanol()
             2 -> GestorDeLibrosIUTIngles()
-            else -> { TODO()}
+            else -> {
+                TODO()
+            }
         }
     }
 }
 
-interface GestorDeLibrosIUT{
+interface GestorDeLibrosIUT {
     fun obtenerID(): String
-    fun existeLibro(cat: Catalogo,idLibro: String)
+    fun existeLibro(cat: Catalogo, idLibro: String)
     fun infoLibro(cat: Catalogo, idLibro: String)
+    fun eliminarLibro(cat: Catalogo, idLibro: String)
 }
 
 
-class GestorDeLibrosIUTEspanol() : GestorDeLibrosIUT{
+class GestorDeLibrosIUTEspanol() : GestorDeLibrosIUT {
 
-        override fun obtenerID(): String {
-            println("Introduzca un ID: ")
-            return readln()
-        }
-        override fun existeLibro(cat: Catalogo,idLibro: String) {
-            if(cat.existeLibro(idLibro))
-                println("El libro $idLibro existe!")
-            else
-                println("El libro $idLibro NO existe!")
-        }
+    override fun obtenerID(): String {
+        println("Introduzca un ID: ")
+        return readln()
+    }
 
-        override fun infoLibro(cat: Catalogo, idLibro: String) {
-            val infoLibro = cat.infoLibro(idLibro)
-            if (infoLibro.isNotEmpty())
-                println("La información sobre es la siguiente\n$infoLibro")
-            else
-                println("No se encontró información sobre el libro")
+    override fun existeLibro(cat: Catalogo, idLibro: String) {
+        if (cat.existeLibro(idLibro))
+            println("El libro con la id $idLibro existe!")
+        else
+            println("El libro con la id $idLibro NO existe!")
+    }
+
+    override fun infoLibro(cat: Catalogo, idLibro: String) {
+        val infoLibro = cat.infoLibro(idLibro)
+        if (infoLibro.isNotEmpty())
+            println("La información sobre es la siguiente\n$infoLibro")
+        else
+            println("No se encontró información sobre el libro")
+    }
+
+    override fun eliminarLibro(cat: Catalogo, idLibro: String) {
+        val borrado = cat.borrarLibro(idLibro)
+        if (borrado){
+            println("El libro con la id $idLibro ha sido eliminado correctamente")
+        }else{
+            println("El libro con la id $idLibro NO existe!")
         }
+    }
 
 
 }
 
-class GestorDeLibrosIUTIngles() : GestorDeLibrosIUT{
+class GestorDeLibrosIUTIngles() : GestorDeLibrosIUT {
 
-        override fun obtenerID(): String {
-            println("Enter ID: ")
-            return readln()
-        }
-        override fun existeLibro(cat: Catalogo,idLibro: String) {
-            if(cat.existeLibro(idLibro))
-                println("The book $idLibro exist!")
-            else
-                println("The book $idLibro doesn't exist!")
-        }
+    override fun obtenerID(): String {
+        println("Enter ID: ")
+        return readln()
+    }
 
-        override fun infoLibro(cat: Catalogo, idLibro: String) {
-            val infoLibro = cat.infoLibro(idLibro)
-            if (infoLibro.isNotEmpty())
-                println("The information about is as follows\n$infoLibro")
-            else
-                println("No information found about the book")
+    override fun existeLibro(cat: Catalogo, idLibro: String) {
+        if (cat.existeLibro(idLibro))
+            println("The book $idLibro exist!")
+        else
+            println("The book $idLibro doesn't exist!")
+    }
+
+    override fun infoLibro(cat: Catalogo, idLibro: String) {
+        val infoLibro = cat.infoLibro(idLibro)
+        if (infoLibro.isNotEmpty())
+            println("The information about is as follows\n$infoLibro")
+        else
+            println("No information found about the book")
+    }
+
+    override fun eliminarLibro(cat: Catalogo, idLibro: String) {
+        val borrado = cat.borrarLibro(idLibro)
+        if (borrado){
+            println("The workbook with the id $idLibro has been successfully deleted")
+        }else{
+            println("The book with the id $idLibro doesn't exist!")
         }
+    }
 
 }
 
 
 fun main() {
     val catalogo1 = CatalogoLibrosXML("..\\DAM1-6_5-AGB\\src\\main\\kotlin\\Catalog.xml")
-    val jsonLibros = """[{"id":"bk101","autor":"Pedris1","title":"Libro de eduardo 1","genre":"Ficcion 1","price":29.41,"publish_date":"Oct 1, 2000 12:00:00 AM","description":"Descripción del libro 1"}
+    val jsonLibros =
+        """[{"id":"bk101","autor":"Pedris1","title":"Libro de eduardo 1","genre":"Ficcion 1","price":29.41,"publish_date":"Oct 1, 2000 12:00:00 AM","description":"Descripción del libro 1"}
         |,{"id":"bk102","autor":"Pedris2","title":"Libro de eduardo 2","genre":"Ficcion 2","price":29.42,"publish_date":"Oct 2, 2000 12:00:00 AM","description":"Descripción del libro 2"}
         |,{"id":"bk103","autor":"Pedris3","title":"Libro de eduardo 3","genre":"Ficcion 3","price":29.43,"publish_date":"Oct 3, 2000 12:00:00 AM","description":"Descripción del libro 3"}
         |,{"id":"bk104","autor":"Pedris4","title":"Libro de eduardo 4","genre":"Ficcion 4","price":29.44,"publish_date":"Oct 4, 2000 12:00:00 AM","description":"Descripción del libro 4"}
@@ -111,5 +140,5 @@ fun main() {
     val catalogo3 = CatalogoLibrosSQL(connection)
 
     val gestorDeLibros = GestorDeLibros(catalogo3)
-    gestorDeLibros.mostrarInfoDeUnLibro()
+    gestorDeLibros.eliminarUnLibro()
 }

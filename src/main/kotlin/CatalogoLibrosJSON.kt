@@ -93,4 +93,8 @@ public class CatalogoLibrosJSON(cargador:String):Catalogo
     override fun existeLibro(idLibro: String): Boolean {
         return libros.indexOfFirst { it.id == idLibro } >=0
     }
+
+    override fun borrarLibro(idLibro: String): Boolean {
+        TODO("Not yet implemented")
+    }
 }

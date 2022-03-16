@@ -74,6 +74,10 @@ class CatalogoLibrosXML(private val cargador: String) :Catalogo{
         return existe
     }
 
+    override fun borrarLibro(idLibro: String): Boolean {
+        TODO("Not yet implemented")
+    }
+
     /*
       *
       * @return  Devuelve true si existe, `false` en caso contrario.
